@@ -7,7 +7,7 @@ import os, warnings, joblib
 warnings.filterwarnings("ignore")
 
 st.set_page_config(
-    page_title="Beijing Air Quality",
+    page_title="China Env Data",
     page_icon="🌫️",
     layout="wide",
     initial_sidebar_state="expanded"
