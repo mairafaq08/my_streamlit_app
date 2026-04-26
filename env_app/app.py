@@ -182,7 +182,8 @@ with st.sidebar:
         "**Module:** CMP7005  \n**Assessment:** PRAC1  \n"
         "**Dataset:** Beijing Air Quality  \n"
         "**Stations:** Dongsi, Wanshouxigong (Urban) "
-        "| Dingling, Huairou (Suburban)"
+        "| Dingling, Huairou (Suburban) \n"
+        "**Author:** Maira Afaq  \n**Student ID:** st20351395 "
     )
     st.markdown("---")
 
