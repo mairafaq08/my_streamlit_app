@@ -546,12 +546,12 @@ elif page == "🤖 Model & Predictions":
     t_perf, t_pred, t_fi = st.tabs(
         ["📈 Performance", "🔮 Predict", "🎯 Feature Importance"]
     )
+    with t_pred:
+        print("first 5 rows of df_full:")
+        print(df_full.head(5))
+        print("first 5 rows of df:")
+        print(df.head(5))
 
-
-print("first 5 rows of df_full:")
-print(df_full.head(5))
-print("first 5 rows of df:")
-print(df.head(5))
 
 
 
