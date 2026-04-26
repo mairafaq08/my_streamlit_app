@@ -4,6 +4,8 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 import os, warnings, joblib
+from statsmodels.tsa.statespace.sarimax import SARIMAX
+
 warnings.filterwarnings("ignore")
 
 st.set_page_config(
@@ -547,10 +549,50 @@ elif page == "🤖 Model & Predictions":
         ["📈 Performance", "🔮 Predict", "🎯 Feature Importance"]
     )
     with t_pred:
-        print("first 5 rows of df_full:")
-        print(df_full.head(5))
-        print("first 5 rows of df:")
-        print(df.head(5))
+        # 1. Create a proper datetime index
+        df_index = df.set_index('datetime').sort_index()
+        # 2. Resample to DAILY frequency (Hourly is often too noisy for a first try)
+        # This smooths out the spikes and makes the 2018 prediction clearer
+        df_daily = df_index.resample('D').mean().dropna()
+        # 3. Define Target (y) and Weather Helpers (X)
+        y3 = df_daily['PM2.5']
+        X3 = df_daily[['TEMP', 'PRES', 'WSPM', 'DEWP']]
+        weather_profile = X3.groupby(X3.index.month).mean()
+        # 2. Create the exogenous data for March (3) to Dec (12)
+        # We map the average weather to the specific months we are predicting
+        future_months = range(3, 13)
+        future_exog = weather_profile.loc[future_months]
+
+        # 3. If you want DAILY prediction, we need to expand those months to days
+        # For a quick check, let's just predict MONTHLY first to see if the shape is right
+        y_monthly = y3.resample('M').mean()
+        X_monthly = X3.resample('M').mean()
+
+        # 1. Simplify the model (Remove the complex seasonal math that is failing)
+        # We use order (1,0,0) which is simpler and less likely to "stall"
+        model_final = SARIMAX(y_monthly,
+                             exog=X_monthly,
+                             order=(1,0,0),             # Simplified trend
+                             seasonal_order=(0,0,0,0),   # Let the Weather (X) handle the seasons
+                             enforce_stationarity=False)
+
+        # 2. Fit with a different optimizer
+        results = model_final.fit(method='nm', maxiter=500) # 'nm' is more robust for small data
+        # 3. Predict the remaining 10 months of 2017
+        # Make sure future_exog has months 3 through 12
+        forecast = results.get_forecast(steps=10, exog=future_exog)
+        mean_forecast = forecast.predicted_mean
+
+        # 4. Plot to check the "U-Shape"
+        plt.figure(figsize=(10,5))
+        plt.plot(y_monthly['2016':], label='Historical')
+        plt.plot(mean_forecast, label='2017 Forecast', color='red', marker='o')
+        plt.title("Monthly PM2.5 Forecast (2017)")
+        plt.legend()
+        plt.show()
+
+
+
 
 
 
