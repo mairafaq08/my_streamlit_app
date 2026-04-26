@@ -313,7 +313,7 @@ elif page == "📂 Dataset Explorer":
     with t1:
         keep_cols = ["datetime","station","station_type","PM2.5","PM10",
                      "SO2","NO2","CO","O3","TEMP","PRES","DEWP","RAIN",
-                     "WSPM","season","AQI_level"]
+                     "WSPM","season","AQI_level","year","month","day","hour"]
         keep_cols = [c for c in keep_cols if c in df.columns]
 
         n   = st.slider("Rows to display", 10, 1000, 100)
