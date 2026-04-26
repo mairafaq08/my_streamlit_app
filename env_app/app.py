@@ -414,10 +414,26 @@ elif page == "📊 Visualisations":
         fig  = px.scatter(
             samp, x=xv, y=yv, color="station",
             color_discrete_map=STATION_CLR,
-            opacity=0.45, trendline="ols",
+            opacity=0.45, #trendline="ols",
             title=f"{yv} vs {xv}",
             template="plotly_white"
         )
+            # overall trend line drawn with numpy — zero extra dependencies
+        valid = samp[[xv, yv]].dropna()
+        if len(valid) > 10:
+            z     = np.polyfit(valid[xv], valid[yv], 1)
+            x_rng = np.linspace(valid[xv].min(), valid[xv].max(), 300)
+            y_rng = np.poly1d(z)(x_rng)
+            r_val = float(np.corrcoef(valid[xv], valid[yv])[0, 1])
+            fig.add_trace(go.Scatter(
+                x=x_rng, y=y_rng,
+                mode="lines",
+                line=dict(color="black", width=2, dash="dash"),
+                name=f"Trend  r={r_val:.2f}",
+                showlegend=True,
+            ))
+
+       
         st.plotly_chart(fig, use_container_width=True)
 
         st.markdown("##### Pearson Correlation Matrix")
