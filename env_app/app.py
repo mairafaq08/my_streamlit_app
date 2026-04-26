@@ -43,8 +43,7 @@ SUBURBAN = ["Dingling", "Huairou"]
 
 POLL  = ["PM2.5", "PM10", "SO2", "NO2", "CO", "O3"]
 MET   = ["TEMP", "PRES", "DEWP", "RAIN", "WSPM"]
-date_cols   = ["year", "month", "day", "hour"]
-NUM   = POLL + MET + date_cols
+NUM   = POLL + MET
 
 STATION_CLR = {
     "Dongsi"       : "#e74c3c",
@@ -539,8 +538,10 @@ elif page == "📊 Visualisations":
 # ════════════════════════════════════════════════════════════════
 #  PAGE — MODEL & PREDICTIONS
 # ════════════════════════════════════════════════════════════════
-
-df_full.show()
+print("first 5 rows of df_full:")
+print(df_full.head(5))
+print("first 5 rows of df:")
+print(df.head(5))
 
 
 
