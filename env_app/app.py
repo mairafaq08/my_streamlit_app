@@ -538,6 +538,16 @@ elif page == "📊 Visualisations":
 # ════════════════════════════════════════════════════════════════
 #  PAGE — MODEL & PREDICTIONS
 # ════════════════════════════════════════════════════════════════
+
+elif page == "🤖 Model & Predictions":
+    st.markdown('<p class="section-title">🤖 PM2.5 Prediction — Random Forest</p>',
+                unsafe_allow_html=True)
+
+    t_perf, t_pred, t_fi = st.tabs(
+        ["📈 Performance", "🔮 Predict", "🎯 Feature Importance"]
+    )
+
+
 print("first 5 rows of df_full:")
 print(df_full.head(5))
 print("first 5 rows of df:")
