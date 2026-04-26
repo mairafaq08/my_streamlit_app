@@ -566,8 +566,8 @@ elif page == "🤖 Model & Predictions":
 
         # 3. If you want DAILY prediction, we need to expand those months to days
         # For a quick check, let's just predict MONTHLY first to see if the shape is right
-        y_monthly = y3.resample('M').mean()
-        X_monthly = X3.resample('M').mean()
+        y_monthly = y3.resample('ME').mean()
+        X_monthly = X3.resample('ME').mean()
 
         # 1. Simplify the model (Remove the complex seasonal math that is failing)
         # We use order (1,0,0) which is simpler and less likely to "stall"
