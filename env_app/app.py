@@ -554,7 +554,7 @@ elif page == "🤖 Model & Predictions":
         df_index = df.set_index('datetime').sort_index()
         # 2. Resample to DAILY frequency (Hourly is often too noisy for a first try)
         # This smooths out the spikes and makes the 2018 prediction clearer
-        df_daily = df_index.resample('D').mean().dropna()
+        df_daily = df_index.resample('D').mean(numeric_only=True).dropna()
         # 3. Define Target (y) and Weather Helpers (X)
         y3 = df_daily['PM2.5']
         X3 = df_daily[['TEMP', 'PRES', 'WSPM', 'DEWP']]
@@ -585,16 +585,16 @@ elif page == "🤖 Model & Predictions":
         mean_forecast = forecast.predicted_mean
 
         # 4. Plot to check the "U-Shape"
-        plt.figure(figsize=(10,5))
-        plt.plot(y_monthly['2016':], label='Historical')
-        plt.plot(mean_forecast, label='2017 Forecast', color='red', marker='o')
-        plt.title("Monthly PM2.5 Forecast (2017)")
-        plt.legend()
-        plt.show()
-
-
-
-
-
+        #plt.figure(figsize=(10,5))        
+        #plt.plot(y_monthly['2016':], label='Historical')
+        #plt.plot(mean_forecast, label='2017 Forecast', color='red', marker='o')
+        #plt.title("Monthly PM2.5 Forecast (2017)")
+        #plt.legend()
+        fig, ax = plt.subplots(figsize=(10, 5)) # Create a figure object
+        ax.plot(y_monthly['2016':], label='Historical', marker='s')
+        ax.plot(mean_forecast, label='2017 Forecast', color='red', marker='o')
+        ax.set_title("Monthly PM2.5 Forecast (2017)")
+        ax.legend()
+        st.pyplot(fig)
 
 
